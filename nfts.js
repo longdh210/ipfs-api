@@ -1,10 +1,10 @@
-const tokenaddress = "0xb81239EE648B1eB77BE168CEc6d9a7B06ebC7e7c"
+const tokenaddress = "0xd0EC5c3978F11013F5e9e3FFDe565988F3267636"
 const Token = require('./Token.json')
 const { ethers } = require('ethers')
 var express = require('express')
 var router = express.Router()
 var axios = require('axios')
-const nfts = []
+let nfts = []
 
 async function getToken() {
     const provider = new ethers.providers.JsonRpcProvider("https://speedy-nodes-nyc.moralis.io/12c36cfbdd209707bb91d9a7/bsc/testnet")
@@ -19,13 +19,25 @@ async function getToken() {
             image: meta.data.image,
             name: meta.data.name,
             description: meta.data.description,
+            price: meta.data.price,
+            addressOwner: meta.data.addressOwner,
+            addressToken: meta.data.addressToken,
         }
         return item
     }))
-    nfts.push(items)
+    return items
+    // nfts.push(items)
 }
-getToken()
-router.get('/', function (req, res) {
-    res.json(nfts)
+const data = getToken()
+data.then(function (result) {
+    console.log(result)
+    router.get('/', function (req, res) {
+        res.json(result)
+    })
 })
+// .then(function () {
+//     router.get('/', function (req, res) {
+//         nfts
+//     })
+// })
 module.exports = router;
