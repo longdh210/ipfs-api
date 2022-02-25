@@ -46,9 +46,12 @@ router.post("/", async (req, res) => {
   try {
     console.log("run");
     const result = await pool.query(
-      `INSERT INTO nft (id,name,image,description,addressowner) VALUES (${id},'${name}','${image}','${description}','${addressOwner}')`
+      `INSERT INTO nft (id,name,image,description,addressowner) 
+      VALUES (${id},'${name}','${image}','${description}','${addressOwner}')
+      RETURNING id,name,image,description,addressowner;
+      `
     );
-    res.send(result);
+    res.send(result.rows);
   } catch (e) {
     res.status(500).send();
     console.log(e);
