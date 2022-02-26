@@ -1,4 +1,3 @@
-// var express = require('express');
 var cookieParser = require("cookie-parser");
 
 const port = process.env.PORT || 3000;
