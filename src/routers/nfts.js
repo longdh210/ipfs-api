@@ -6,39 +6,15 @@ const pool = require("../db/postgre");
 const { response } = require("express");
 const pinJSONToIPFS = require("../middleware/pinata");
 
-const PUBLIC_KEY = "0x987C8ABA89da7e98Cd2dd54d6b891984B450c0e6";
-const PRIVATE_KEY = "a518e1780a0ffcf71a68528db6c8decfbb333811bf670b710bf8d8b3951fb848";
+const PUBLIC_KEY = "0x80e7e19d5950121304a2a4D265582a05cF2099f3";
+const PRIVATE_KEY = "da2117b83749a891fc6017bdaa34f2fd6a8d0581a335921ae80e40e95aa4e1b6";
 var Web3 = require("web3");
 var web3 = new Web3("https://speedy-nodes-nyc.moralis.io/12c36cfbdd209707bb91d9a7/bsc/testnet");
 const tokenaddress = "0x535a939aC42F70954FFd8204d384f56b032ddE0f";
 const Token = require("../../Token.json");
 const tokenContract = new web3.eth.Contract(Token.abi, tokenaddress);
 
-// async function getToken() {
-//   const provider = new ethers.providers.JsonRpcProvider(
-//     "https://speedy-nodes-nyc.moralis.io/12c36cfbdd209707bb91d9a7/bsc/testnet"
-//   );
-//   const tokenContract = new ethers.Contract(tokenaddress, Token.abi, provider);
-//   const data = await tokenContract.getTokenData();
-
-//   const items = await Promise.all(
-//     data.map(async (i) => {
-//       const tokenUri = await tokenContract.tokenURI(i.tokenId);
-//       const meta = await axios.get(tokenUri);
-//       let item = {
-//         tokenId: i.tokenId.toNumber(),
-//         image: meta.data.image,
-//         name: meta.data.name,
-//         description: meta.data.description,
-//         price: meta.data.price,
-//         addressOwner: meta.data.addressOwner,
-//         addressToken: meta.data.addressToken,
-//       };
-//       return item;
-//     })
-//   );
-//   return items;
-// }
+//withdraw || mint nft
 const mintToken = async (recipdent, tokenURI) => {
   const nonce = await web3.eth.getTransactionCount(PUBLIC_KEY, 'latest'); //get latest nonce
   //the transaction
@@ -125,6 +101,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+//withdraw nft then delete data
 router.delete("/:id", async function (req, res) {
   const id = parseInt(req.params.id);
   //get data of nft
