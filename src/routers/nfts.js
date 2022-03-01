@@ -104,6 +104,7 @@ router.put("/:id", async (req, res) => {
 //withdraw nft then delete data
 router.delete("/:id", async function (req, res) {
   const id = parseInt(req.params.id);
+  const { addressWithdraw } = req.body;
   //get data of nft
   let result = await pool.query(
     'SELECT * FROM nft WHERE id = $1',
@@ -128,7 +129,7 @@ router.delete("/:id", async function (req, res) {
     console.log("TokenURI: ", tokenURI)
 
     //withdraw nft || mint
-    mintToken(result.rows[0].addressowner, tokenURI)
+    mintToken(addressWithdraw, tokenURI)
   } catch (error) {
     console.log('Error uploading file: ', error)
   }
