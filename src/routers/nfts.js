@@ -56,7 +56,10 @@ const mintToken = async (recipdent, tokenURI) => {
 
 router.get("/", async function (req, res) {
   //const data = await getToken();
-  const result = await pool.query("SELECT * FROM nft");
+  const ownerAddress = req.query.ownerAddress;
+  const result = await pool.query("SELECT * FROM nft WHERE addressowner = $1", [
+    ownerAddress,
+  ]);
 
   res.json(result.rows);
 });
