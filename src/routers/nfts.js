@@ -13,12 +13,12 @@ var Web3 = require("web3");
 var web3 = new Web3(
   "https://speedy-nodes-nyc.moralis.io/12c36cfbdd209707bb91d9a7/bsc/testnet"
 );
-const tokenaddress = "0x535a939aC42F70954FFd8204d384f56b032ddE0f";
+const tokenaddress = "0x883D09429Cb8A7A284aB091506DaE4CB6Dc6ea47";
 const Token = require("../../Token.json");
 const tokenContract = new web3.eth.Contract(Token.abi, tokenaddress);
 
 //withdraw || mint nft
-const mintToken = async (recipdent, tokenURI) => {
+const mintToken = async (tokenId, recipdent, tokenURI) => {
   const nonce = await web3.eth.getTransactionCount(PUBLIC_KEY, "latest"); //get latest nonce
   //the transaction
   const tx = {
@@ -26,7 +26,7 @@ const mintToken = async (recipdent, tokenURI) => {
     to: tokenaddress,
     nonce: nonce,
     gas: 500000,
-    data: tokenContract.methods.mintNFT(recipdent, tokenURI).encodeABI(),
+    data: tokenContract.methods.mintNFT(tokenId, recipdent, tokenURI).encodeABI(),
   };
   const signPromise = web3.eth.accounts.signTransaction(tx, PRIVATE_KEY);
   signPromise
@@ -139,7 +139,7 @@ router.delete("/:id", async function (req, res) {
     console.log("TokenURI: ", tokenURI);
 
     //withdraw nft || mint
-    mintToken(addressWithdraw, tokenURI);
+    mintToken(id, addressWithdraw, tokenURI);
   } catch (error) {
     console.log("Error uploading file: ", error);
   }
