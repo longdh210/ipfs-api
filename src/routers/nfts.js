@@ -13,7 +13,7 @@ var Web3 = require("web3");
 var web3 = new Web3(
   "https://speedy-nodes-nyc.moralis.io/12c36cfbdd209707bb91d9a7/bsc/testnet"
 );
-const tokenaddress = "0x883D09429Cb8A7A284aB091506DaE4CB6Dc6ea47";
+const tokenaddress = "0xc7f331a2F21049613eb3529086F3a06aDEee35Ec";
 const Token = require("../../Token.json");
 const tokenContract = new web3.eth.Contract(Token.abi, tokenaddress);
 
@@ -26,7 +26,9 @@ const mintToken = async (tokenId, recipdent, tokenURI) => {
     to: tokenaddress,
     nonce: nonce,
     gas: 500000,
-    data: tokenContract.methods.mintNFT(tokenId, recipdent, tokenURI).encodeABI(),
+    data: tokenContract.methods
+      .mintNFT(tokenId, recipdent, tokenURI)
+      .encodeABI(),
   };
   const signPromise = web3.eth.accounts.signTransaction(tx, PRIVATE_KEY);
   signPromise
