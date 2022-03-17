@@ -11,9 +11,9 @@ const PRIVATE_KEY =
   "da2117b83749a891fc6017bdaa34f2fd6a8d0581a335921ae80e40e95aa4e1b6";
 var Web3 = require("web3");
 var web3 = new Web3(
-  "https://speedy-nodes-nyc.moralis.io/12c36cfbdd209707bb91d9a7/bsc/testnet"
+  "https://rpc-mumbai.matic.today"
 );
-const tokenaddress = "0x883D09429Cb8A7A284aB091506DaE4CB6Dc6ea47";
+const tokenaddress = "0x104d252564731a240d3fb5Dbc13F3F6029831836";
 const Token = require("../../Token.json");
 const tokenContract = new web3.eth.Contract(Token.abi, tokenaddress);
 
