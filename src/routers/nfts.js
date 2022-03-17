@@ -26,7 +26,9 @@ const mintToken = async (tokenId, recipdent, tokenURI) => {
     to: tokenaddress,
     nonce: nonce,
     gas: 500000,
-    data: tokenContract.methods.mintNFT(tokenId, recipdent, tokenURI).encodeABI(),
+    data: tokenContract.methods
+      .mintNFT(tokenId, recipdent, tokenURI)
+      .encodeABI(),
   };
   const signPromise = web3.eth.accounts.signTransaction(tx, PRIVATE_KEY);
   signPromise
