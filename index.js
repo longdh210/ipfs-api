@@ -15,8 +15,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(upload.array());
 
-const nfts = require("./src/routers/nfts.js");
+const NFT = require("./src/routers/NFT.js");
 
-app.use("/nfts", nfts);
+app.use("/nft", NFT);
 
 app.listen(port, () => console.log(`NFT app listening on port ${port}!`));
