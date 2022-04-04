@@ -3,16 +3,12 @@ const router = express.Router();
 const Token = require("../../GAToken.json");
 const ethers = require("ethers");
 const axios = require("axios");
-const tokenaddress = process.env.tokenaddress;
-// import Web3Modal from "web3modal";
-// import Web3 from "web3";
-// // import { useNavigate } from 'react-router-dom';
-// import Web3EthContract from "web3-eth-contract";
-// const Web3Modal = require("web3modal");
+const tokenaddress = "0x5215b5e0991e80DC755435A8D6009832509a2628";
 const Web3 = require("web3");
+const { checkResultErrors } = require("ethers/lib/utils");
 const web3 = new Web3("https://rpc-mumbai.matic.today");
-const Web3EthContract = require("web3-eth-contract");
-const PRIVATE_KEY = process.env.PRIVATE_KEY;
+// const PRIVATE_KEY = "d63f28afb8bbd50a7c733adca1a2028a63881bd21458f349e199a83093404a19";
+// const caller = "0xD5B0Eb7d7a404054A93B760122983C5EC214d4AE"
 
 async function dataNFT(i, tokenContract) {
   const tokenUri = await tokenContract.tokenURI(i.tokenId);
@@ -22,70 +18,92 @@ async function dataNFT(i, tokenContract) {
     addressOwner: i.owner,
     image: meta.data.image,
     name: meta.data.name,
-    // price: meta.data.price,
+    description: meta.data.description,
   };
   return item;
 }
 
 //get data nft
-router.get("/dataNft", async function (req, res) {
+router.get("/", async function (req, res) {
+  const { addressOwner } = req.body;
   const provider = new ethers.providers.JsonRpcProvider(
-    "https://rpc-mumbai.matic.today"
+    "https://polygon-mumbai.g.alchemy.com/v2/1IISvtbO2J8Uz_s2akC4cdk9qm6rnrY0"
   );
   const tokenContract = new ethers.Contract(tokenaddress, Token.abi, provider);
   const data = await tokenContract.getTokenData();
 
   try {
     const result = [];
+    const query = []
     //chuyen promise.all thanh vong lap for vi dung promise dinh loi 429: Too Request
     for (const item of data) {
       result.push(await dataNFT(item, tokenContract));
     }
-    res.status(200).json(result);
+    for(const item of result) {
+      if(addressOwner == item.addressOwner) {
+        query.push(item);
+      }
+    }
+    res.status(200).json(query);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
 });
 
-const calcuGasFee = async (caller, tokenaddress) => {
-  var balance = await web3.eth.getBalance(caller);
+const calcuGasFee = async (sender, private_key) => {
+  var balance = await web3.eth.getBalance(sender);
   var balanceInEther = web3.utils.fromWei(balance.toString(), "ether");
+  const contract = new web3.eth.Contract(Token.abi, tokenaddress);
   if (balanceInEther < 0.4) {
     let gasFee = 0.5 - balanceInEther;
     gasFee = web3.utils.toWei(`${gasFee}`, "ether");
     console.log("withdraw: ", gasFee);
-    // const contract = new ethers.Contract(tokenaddress, Token.abi, provider);
-    const contract = new Web3EthContract(Token.abi, tokenaddress);
-    contract.methods.withdraw(gasFee).send({
-      from: caller,
-      gasPrice: "40000000000",
-    });
+    const tx = {
+      from: sender,
+      to: tokenaddress,
+      gas: 500000,
+      data: contract.methods
+        .withdraw(
+          gasFee
+        )
+        .encodeABI(),
+    };
+    const signPromise = await web3.eth.accounts.signTransaction(tx, private_key);
+    web3.eth.sendSignedTransaction(
+      signPromise.rawTransaction,
+      function (err, hash) {
+        if (!err) {
+          console.log("The hash of your transaction is: ", hash);
+        } else {
+          console.log(
+            "Something went wrong when submitting your transaction:",
+            err
+          );
+        }
+      }
+    );
   } else {
     console.log("balance of user > 0.4");
   }
 };
-const transfer = async (recipient, tokenId) => {
-  // const provider = new ethers.providers.JsonRpcProvider(
-  //   "https://rpc-mumbai.matic.today"
-  // );
-  var caller = "0xfc704cb253a586a6539f29705ecc5faeea3e2fb3";
+
+const transfer = async (sender, private_key, recipient, tokenId) => {
   const contract = new web3.eth.Contract(Token.abi, tokenaddress);
   const tx = {
-    from: caller,
-    to: tokenaddress,
-    gas: 500000,
-    gasPrice: "40000000000",
-    data: contract.methods
+    'from': sender,
+    'to': tokenaddress,
+    'gas': 500000,
+    'data': contract.methods
       .transferNFT(
-        "0xFc704cB253A586A6539f29705ecC5FAeEa3e2FB3",
+        sender,
         recipient,
         tokenId
       )
       .encodeABI(),
   };
 
-  const signPromise = await web3.eth.accounts.signTransaction(tx, PRIVATE_KEY);
-  web3.eth.sendSignedTransaction(
+  const signPromise = await web3.eth.accounts.signTransaction(tx, private_key);
+  await web3.eth.sendSignedTransaction(
     signPromise.rawTransaction,
     function (err, hash) {
       if (!err) {
@@ -98,13 +116,14 @@ const transfer = async (recipient, tokenId) => {
       }
     }
   );
+  calcuGasFee(sender, private_key);
 };
-router.post("/transferNFT", async function (req, res) {
-  const { recipient, tokenId } = req.body;
+
+router.post("/:id", async function (req, res) {
+  const id = parseInt(req.params.id);
+  const { sender, private_key, recipient } = req.body;
   try {
-    var caller = "0xfc704cb253a586a6539f29705ecc5faeea3e2fb3";
-    transfer(recipient, tokenId);
-    await calcuGasFee(caller, tokenaddress);
+    transfer(sender, private_key, recipient, id);
     res.status(200).json("ok");
   } catch (error) {
     res.status(404).json({ message: error.message });

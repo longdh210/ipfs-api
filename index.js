@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(upload.array());
 
-const NFT = require("./src/routers/NFT.js");
+const NFT = require("./src/routers/features.js");
 
 app.use("/nft", NFT);
 
