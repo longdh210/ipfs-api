@@ -15,8 +15,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(upload.array());
 
-const NFT = require("./src/routers/features.js");
+const solRouter = require("./src/routers/nfts.js");
 
-app.use("/nft", NFT);
+app.use("/nft", solRouter);
 
 app.listen(port, () => console.log(`NFT app listening on port ${port}!`));
