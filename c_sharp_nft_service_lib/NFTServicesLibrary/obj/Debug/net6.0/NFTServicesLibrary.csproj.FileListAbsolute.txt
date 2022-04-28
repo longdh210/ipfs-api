@@ -1,0 +1,12 @@
+/Users/huytruong/Project/Personal/c_sharp_nft_service_lib/NFTServicesLibrary/bin/Debug/net6.0/NFTServicesLibrary.deps.json
+/Users/huytruong/Project/Personal/c_sharp_nft_service_lib/NFTServicesLibrary/bin/Debug/net6.0/NFTServicesLibrary.dll
+/Users/huytruong/Project/Personal/c_sharp_nft_service_lib/NFTServicesLibrary/bin/Debug/net6.0/NFTServicesLibrary.pdb
+/Users/huytruong/Project/Personal/c_sharp_nft_service_lib/NFTServicesLibrary/obj/Debug/net6.0/NFTServicesLibrary.csproj.AssemblyReference.cache
+/Users/huytruong/Project/Personal/c_sharp_nft_service_lib/NFTServicesLibrary/obj/Debug/net6.0/NFTServicesLibrary.GeneratedMSBuildEditorConfig.editorconfig
+/Users/huytruong/Project/Personal/c_sharp_nft_service_lib/NFTServicesLibrary/obj/Debug/net6.0/NFTServicesLibrary.AssemblyInfoInputs.cache
+/Users/huytruong/Project/Personal/c_sharp_nft_service_lib/NFTServicesLibrary/obj/Debug/net6.0/NFTServicesLibrary.AssemblyInfo.cs
+/Users/huytruong/Project/Personal/c_sharp_nft_service_lib/NFTServicesLibrary/obj/Debug/net6.0/NFTServicesLibrary.csproj.CoreCompileInputs.cache
+/Users/huytruong/Project/Personal/c_sharp_nft_service_lib/NFTServicesLibrary/obj/Debug/net6.0/NFTServicesLibrary.dll
+/Users/huytruong/Project/Personal/c_sharp_nft_service_lib/NFTServicesLibrary/obj/Debug/net6.0/refint/NFTServicesLibrary.dll
+/Users/huytruong/Project/Personal/c_sharp_nft_service_lib/NFTServicesLibrary/obj/Debug/net6.0/NFTServicesLibrary.pdb
+/Users/huytruong/Project/Personal/c_sharp_nft_service_lib/NFTServicesLibrary/obj/Debug/net6.0/ref/NFTServicesLibrary.dll
